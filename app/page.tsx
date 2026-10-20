@@ -1,8 +1,11 @@
 import { Suspense } from 'react';
+import { connection } from 'next/server';
 import { pool } from '@/lib/db';
 import CrudView from '@/component/CrudView';
 
 async function DaftarProduk() {
+  await connection(); 
+
   const [rows]: any = await pool.query('SELECT * FROM products ORDER BY id DESC');
   return <CrudView products={rows} />;
 }
