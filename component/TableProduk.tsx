@@ -13,9 +13,8 @@ export default function TableProduk({ products = [], onEdit, onRefresh }: any) {
   };
 
   const handleDeleteAll = async () => {
-    if (confirm('⚠️ Yakin ingin menghapus SEMUA data?')) {
+    if (confirm('Yakin ingin menghapus semua data?')) {
       setIsDeleting(true);
-      // PASTIKAN PAKAI PRODUCTS
       await fetch('/api/products', { method: 'DELETE' });
       setIsDeleting(false);
       onRefresh();
@@ -39,15 +38,17 @@ export default function TableProduk({ products = [], onEdit, onRefresh }: any) {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b-2 border-gray-100 text-gray-600 text-sm">
-              <th className="p-4 font-semibold">Nama Produk</th>
+              <th className="p-4 font-semibold w-1/4">Nama Produk</th>
+              <th className="p-4 font-semibold w-1/3">Deskripsi</th> 
               <th className="p-4 font-semibold">Harga</th>
+              <th className="p-4 font-semibold text-center">Terakhir Diubah</th> 
               <th className="p-4 font-semibold text-center w-32">Aksi</th>
             </tr>
           </thead>
           <tbody>
             {products.length === 0 ? (
               <tr>
-                <td colSpan={3} className="text-center p-8 text-gray-500">
+                <td colSpan={5} className="text-center p-8 text-gray-500">
                   Belum ada data produk.
                 </td>
               </tr>
@@ -55,7 +56,15 @@ export default function TableProduk({ products = [], onEdit, onRefresh }: any) {
               products.map((p: any) => (
                 <tr key={p.id} className="border-b border-gray-50 hover:bg-gray-50 transition">
                   <td className="p-4 font-semibold text-gray-800">{p.nama}</td>
+                  
+                  <td className="p-4 text-gray-500 text-sm">{p.deskripsi || '-'}</td>
+                  
                   <td className="p-4 text-gray-600">Rp {p.harga.toLocaleString('id-ID')}</td>
+                  
+                  <td className="p-4 text-gray-500 text-xs text-center">
+                    {new Date(p.updated_at || p.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  </td>
+                  
                   <td className="p-4 flex justify-center gap-2">
                     <button onClick={() => onEdit(p)} className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition">
                       <Pencil size={18} />

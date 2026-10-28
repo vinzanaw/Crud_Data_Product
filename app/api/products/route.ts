@@ -16,15 +16,15 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { nama, harga } = body;
+    const { nama, harga, deskripsi } = body;
 
     if (!nama || harga === undefined) {
       return NextResponse.json({ error: 'Nama dan harga wajib diisi' }, { status: 400 });
     }
 
     const [result]: any = await pool.query(
-      'INSERT INTO products (nama, harga) VALUES (?, ?)', 
-      [nama, Number(harga)]
+      'INSERT INTO products (nama, harga, deskripsi) VALUES (?, ?, ?)', 
+      [nama, Number(harga), deskripsi || null]
     );
     return NextResponse.json({ message: 'Berhasil', id: result.insertId }, { status: 201 });
   } catch (error: any) {

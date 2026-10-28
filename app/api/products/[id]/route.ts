@@ -6,9 +6,14 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   try {
     const { id } = await params;
     const body = await request.json();
-    const { nama, harga } = body;
+    
+    const { nama, harga, deskripsi } = body;
 
-    await pool.query('UPDATE products SET nama = ?, harga = ? WHERE id = ?', [nama, Number(harga), id]);
+    await pool.query(
+      'UPDATE products SET nama = ?, harga = ?, deskripsi = ? WHERE id = ?', 
+      [nama, Number(harga), deskripsi || null, id]
+    );
+    
     return NextResponse.json({ message: 'Berhasil diupdate' });
   } catch (error: any) {
     console.error("Error PUT:", error);
